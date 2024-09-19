@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id          Int          @id @default(autoincrement())
+  first_name  String
+  last_name   String
+  mob         String       @unique
+  password    String
+  role        String       @default("Participant")
+  participants Participant[]  // This defines a one-to-many relationship
+  mentors     Course[]      // This defines a one-to-many relationship
+}
+
+model Participant {
+  id              Int      @id @default(autoincrement())
+  userId          Int      // Foreign key to the users table
+  dob             DateTime
+  gender          String
+  address         String
+  age             Int
+  marital_status  String
+  rounds_changing String
+  mentor          String
+  current_level   String
+  native_city     String
+  otp             String
+  email           String   @unique
+  
+  user            users    @relation(fields: [userId], references: [id])
+}
+
+model Course {
+  id          Int        @id @default(autoincrement())
+  name        String
+  title       String
+  startDate   DateTime
+  endDate     DateTime
+  userId      Int
+  user        users       @relation(fields: [userId], references: [id])
+  lectures    Session[]
+}
+
+model Session {
+  id          Int        @id @default(autoincrement())
+  name        String
+  date        DateTime
+  mentorId    Int
+  mentor      Course     @relation(fields: [mentorId], references: [id])
+}
