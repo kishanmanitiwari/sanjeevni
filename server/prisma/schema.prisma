@@ -16,6 +16,10 @@ model users {
   role        String       @default("Participant")
   participants Participant[]  // This defines a one-to-many relationship
   courses     Course[]      // Changed from mentors to courses
+
+  Enrollment Enrollment[]
+
+  Attendance Attendance[]
 }
 
 model Participant {
@@ -45,6 +49,8 @@ model Course {
   userId      Int
   user        users       @relation(fields: [userId], references: [id])
   sessions    Session[]  // Changed from lectures to sessions
+
+  Enrollment Enrollment[]
 }
 
 model Session {
@@ -53,4 +59,25 @@ model Session {
   date        DateTime
   courseId    Int
   course      Course     @relation(fields: [courseId], references: [id])
+
+  Attendance Attendance[]
 }
+
+model Enrollment {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  courseId  Int
+  user      users     @relation(fields: [userId], references: [id])
+  course    Course    @relation(fields: [courseId], references: [id])
+  createdAt DateTime  @default(now())
+}
+
+model Attendance {
+  id        Int       @id @default(autoincrement())
+  sessionId Int
+  userId    Int
+  session   Session   @relation(fields: [sessionId], references: [id])
+  user      users     @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
+}
+

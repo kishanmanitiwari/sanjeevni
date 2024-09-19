@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import authRoutes from "./routes/authRoutes.js";
 import participantRoutes from "./routes/participantRoutes.js";
 import volunteerRoutes from "./routes/volunteerRoutes.js";
+import enrollAttendanceRoutes from './routes/enrollAttendanceRoutes.js'
 
 const app = express();
 const port = 3000;
@@ -17,6 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/auth", authRoutes);
 app.use("/api", participantRoutes);
 app.use("/api", volunteerRoutes);
+app.use("/api",enrollAttendanceRoutes)
 
 // Start the server
 app.listen(port, () => {
