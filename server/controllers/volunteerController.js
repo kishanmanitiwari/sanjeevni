@@ -1,5 +1,6 @@
 import * as volunteerModel from '../models/volunteer.js';
 import Joi from 'joi';
+import { login } from './authController.js';
 
 // POST /volunteer/create-course
 export const createCourse = async (req, res) => {
@@ -31,7 +32,7 @@ export const createCourse = async (req, res) => {
     res.status(500).json({ message: 'Error creating course', error });
   }
 };
-// POST /volunteer/create-session
+
 export const createSession = async (req, res) => {
   const sessionSchema = Joi.object({
     name: Joi.string().min(3).required(),
@@ -45,18 +46,19 @@ export const createSession = async (req, res) => {
   }
 
   const { name, date, courseId } = req.body;
-
+  
   try {
-    const newSession = await volunteerModel.createSession({
-      name,
-      date,
-      courseId,
-    });
+    // Call the model function to create a session
+    const newSession = await volunteerModel.createSession({ name, date, courseId });
     res.status(201).json(newSession);
   } catch (error) {
-    res.status(500).json({ message: 'Error creating session', error });
+    console.error('Error creating session:', error);
+    res.status(500).json({ message: 'Error creating session', error: error.message });
   }
 };
+
+
+
 // GET /volunteer/my-courses
 export const getMyCourses = async (req, res) => {
   const userId = req.user.id; // Assuming user ID is available from authentication middleware

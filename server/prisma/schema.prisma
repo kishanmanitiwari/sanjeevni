@@ -15,7 +15,7 @@ model users {
   password    String
   role        String       @default("Participant")
   participants Participant[]  // This defines a one-to-many relationship
-  mentors     Course[]      // This defines a one-to-many relationship
+  courses     Course[]      // Changed from mentors to courses
 }
 
 model Participant {
@@ -44,13 +44,13 @@ model Course {
   endDate     DateTime
   userId      Int
   user        users       @relation(fields: [userId], references: [id])
-  lectures    Session[]
+  sessions    Session[]  // Changed from lectures to sessions
 }
 
 model Session {
   id          Int        @id @default(autoincrement())
   name        String
   date        DateTime
-  mentorId    Int
-  mentor      Course     @relation(fields: [mentorId], references: [id])
+  courseId    Int
+  course      Course     @relation(fields: [courseId], references: [id])
 }

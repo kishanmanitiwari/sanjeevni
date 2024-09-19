@@ -16,13 +16,17 @@ export const createCourse = async ({ name, title, startDate, endDate, userId }) 
 };
 
 export const createSession = async ({ name, date, courseId }) => {
-  return await prisma.session.create({
-    data: {
-      title: name, // Adjust according to the Session model definition
-      date: new Date(date),
-      courseId,
-    },
-  });
+  try {
+    return await prisma.session.create({
+      data: {
+        name,
+        date: new Date(date), // Ensure date is a Date object
+        courseId, // Ensure courseId is valid
+      },
+    });
+  } catch (error) {
+    throw new Error('Error creating session: ' + error.message);
+  }
 };
 
 export const getCoursesByMentorId = async (userId) => {
@@ -31,7 +35,7 @@ export const getCoursesByMentorId = async (userId) => {
       userId,
     },
     include: {
-      lectures: true, // Assuming you want to include related sessions
+      sessions: true, // Assuming you want to include related sessions
     },
   });
 };

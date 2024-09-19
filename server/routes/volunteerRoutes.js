@@ -8,9 +8,9 @@ const router = express.Router();
 router.post('/volunteer/create-course',authenticate, createCourse);
 
 // POST /volunteer/create-lecture: Create a new lecture under a specific course
-router.post('/volunteer/create-lecture', createSession);
+router.post('/volunteer/create-lecture',authenticate, createSession);
 
 // GET /volunteer/my-courses: Get courses created by the logged-in volunteer
-router.get('/volunteer/my-courses', getMyCourses);
+router.get('/volunteer/my-courses',authenticate, getMyCourses);
 
 export default router;
